@@ -9,6 +9,7 @@
 import React from 'react';
 import type {Node} from 'react';
 import {
+  Button,
   SafeAreaView,
   ScrollView,
   StatusBar,
@@ -25,6 +26,8 @@ import {
   LearnMoreLinks,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+import { joinAppointment } from './src/Teleconsultation/TeleconsultationModule';
+import { config } from './src/Teleconsultation/config';
 
 const Section = ({children, title}): Node => {
   const isDarkMode = useColorScheme() === 'dark';
@@ -66,6 +69,9 @@ const App: () => Node = () => {
         contentInsetAdjustmentBehavior="automatic"
         style={backgroundStyle}>
         <Header />
+        <Button 
+        onPress={() => joinAppointment({serverUrl: 'https://meet.jit.si', roomName: "qwerty", displayName: "Sreekanth T", email: "me.sreekantht@gmail.com", config: config})}
+        title='Start' />
         <View
           style={{
             backgroundColor: isDarkMode ? Colors.black : Colors.white,

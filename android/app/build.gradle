@@ -79,7 +79,12 @@ import org.apache.tools.ant.taskdefs.condition.Os
  */
 
 project.ext.react = [
+    entryFile: "index.js",
     enableHermes: false,  // clean and rebuild if changing
+    bundleAssetName: "app.android.bundle",
+    bundleInStaging: true, // Add this
+    bundleInInternalTest: true, // Add this
+    bundleInRelease: true
 ]
 
 apply from: "../../node_modules/react-native/react.gradle"
@@ -97,7 +102,7 @@ def enableSeparateBuildPerCPUArchitecture = false
 /**
  * Run Proguard to shrink the Java bytecode in release builds.
  */
-def enableProguardInReleaseBuilds = false
+def enableProguardInReleaseBuilds = true
 
 /**
  * The preferred build flavor of JavaScriptCore.
@@ -257,6 +262,19 @@ android {
 
         }
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    packagingOptions {
+    pickFirst '**/armeabi-v7a/libc++_shared.so'
+    pickFirst '**/x86/libc++_shared.so'
+    pickFirst '**/x86_64/libc++_shared.so'
+    pickFirst '**/arm64-v8a/libc++_shared.so'
+    pickFirst '**/libjsc.so'
+    }
 }
 
 dependencies {
@@ -266,6 +284,8 @@ dependencies {
     implementation "com.facebook.react:react-native:+"  // From node_modules
 
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
+
+    implementation ('org.jitsi.react:jitsi-meet-sdk:5.1.0') { transitive = true }
 
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
         exclude group:'com.facebook.fbjni'

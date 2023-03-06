@@ -2,6 +2,9 @@ package com.sandboxjitsi;
 
 import android.app.Application;
 import android.content.Context;
+
+import androidx.annotation.Nullable;
+
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
 import com.facebook.react.ReactInstanceManager;
@@ -28,6 +31,7 @@ public class MainApplication extends Application implements ReactApplication {
           List<ReactPackage> packages = new PackageList(this).getPackages();
           // Packages that cannot be autolinked yet can be added manually here, for example:
           // packages.add(new MyReactNativePackage());
+          packages.add(new ConferenceReactPackage());
           return packages;
         }
 
@@ -35,6 +39,13 @@ public class MainApplication extends Application implements ReactApplication {
         protected String getJSMainModuleName() {
           return "index";
         }
+
+         @Nullable
+        @Override
+        protected String getBundleAssetName() {
+          return "app.android.bundle";
+        }
+
       };
 
   private final ReactNativeHost mNewArchitectureNativeHost =
