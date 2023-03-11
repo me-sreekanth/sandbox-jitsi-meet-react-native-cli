@@ -6,10 +6,11 @@
  * @flow strict-local
  */
 
-import React from 'react';
+import React, { useState } from 'react';
 import type {Node} from 'react';
 import {
   Button,
+  Platform,
   SafeAreaView,
   ScrollView,
   StatusBar,
@@ -28,6 +29,7 @@ import {
 } from 'react-native/Libraries/NewAppScreen';
 import { joinAppointment } from './src/Teleconsultation/TeleconsultationModule';
 import { config } from './src/Teleconsultation/config';
+import JitsiMeet from './src/Teleconsultation/JitsiMeet';
 
 const Section = ({children, title}): Node => {
   const isDarkMode = useColorScheme() === 'dark';
@@ -57,42 +59,50 @@ const Section = ({children, title}): Node => {
 
 const App: () => Node = () => {
   const isDarkMode = useColorScheme() === 'dark';
+  const [isConferenceVisible, setIsConferenceVisible] = useState(false);
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
 
+
+  const onConferenceTerminated = nativeEvent => {
+    /* Conference terminated event */
+    console.log('onConferenceTerminated', nativeEvent);
+    // setMeetView(false);
+    setIsConferenceVisible(false)
+  };
+
+  const onConferenceJoined = nativeEvent => {
+    /* Conference joined event */
+    console.log('onConferenceJoined', nativeEvent);
+  };
+
+  const onConferenceWillJoin = nativeEvent => {
+    /* Conference will join event */
+    console.log('onConferenceWillJoin', nativeEvent);
+  };
+
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <Button 
-        onPress={() => joinAppointment({serverUrl: 'https://meet.jit.si', roomName: "qwerty", displayName: "Sreekanth T", email: "me.sreekantht@gmail.com", config: config})}
-        title='Start' />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.js</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+      <View style={{flex: 1}}>
+
+        {Platform.OS === 'ios' && isConferenceVisible && <JitsiMeet
+            onConferenceJoined={onConferenceJoined}
+            onConferenceTerminated={onConferenceTerminated}
+            onConferenceWillJoin={onConferenceWillJoin}
+            />
+          }
+          {Platform.OS === 'android' && <Button
+           onPress={() => joinAppointment({serverUrl: 'https://meet.jit.si', roomName: "qwerty", displayName: "Sreekanth T", email: "me.sreekantht@gmail.com", config: config})}
+          title='Start Android Jitsi Modulue'
+          />}
+          {Platform.OS === 'ios' && isConferenceVisible === false && 
+          <View style={{flex: 1, justifyContent: "center", alignItems: 'center'}}>
+            <Button 
+            onPress={() => setIsConferenceVisible(true)}
+            title='Start iOS Jitsi Modulue' />
+          </View>}
+          </View>
   );
 };
 

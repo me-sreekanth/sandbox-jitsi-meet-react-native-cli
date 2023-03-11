@@ -1,12 +1,15 @@
-//
-//  RNJitsiMeetView.h
-//  sandboxjitsi
-//
-//  Created by Sreekanth T on 10/03/23.
-//
-
 #ifndef RNJitsiMeetView_h
 #define RNJitsiMeetView_h
+#import <React/RCTComponent.h>
+
+@import JitsiMeetSDK;
+
+@interface RNJitsiMeetView : JitsiMeetView
+@property (nonatomic, copy) RCTBubblingEventBlock onConferenceJoined;
+@property (nonatomic, copy) RCTBubblingEventBlock onConferenceTerminated;
+@property (nonatomic, copy) RCTBubblingEventBlock onConferenceWillJoin;
+@property (nonatomic, copy) RCTBubblingEventBlock onEnteredPip;
+@end
 
 
 #endif /* RNJitsiMeetView_h */
