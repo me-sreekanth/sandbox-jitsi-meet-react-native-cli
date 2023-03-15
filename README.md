@@ -1,2 +1,2 @@
-# sandbox-jitsu-meet-react-native-cli
+# sandbox-jitsi-meet-react-native-cli
 Jitsi meet basic app with Android and iOS native module integrated without react native navigation
